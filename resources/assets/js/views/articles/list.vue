@@ -49,8 +49,7 @@
                 <el-table-column label="操作" prop="id">
                     <template scope="scope">
                         <el-button
-                                size="small"
-                                @click="handleEdit(scope.row.id)">编辑</el-button>
+                                size="small"> <router-link :to="{name: 'articles-edit' , params:{ id: scope.row.id }}">编辑</router-link> </el-button>
                         <el-button
                                 size="small"
                                 type="danger"
@@ -95,10 +94,10 @@
                 this.$store.dispatch('getArticles' , val);
             },
             handleEdit(id) {
-                console.log(id);
+                console.log('article edit');
             },
             handleDelete(id) {
-                console.log(id);
+                console.log('article deleted');
             }
         }
     }

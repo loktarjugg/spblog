@@ -22,6 +22,11 @@ export default [
                         path: 'create',
                         name:'articles-create',
                         component : require('./views/articles/create.vue')
+                    },
+                    {
+                        path:':id/edit',
+                        name:'articles-edit',
+                        component: require('./views/articles/edit.vue')
                     }
 
                 ]

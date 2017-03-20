@@ -2,7 +2,7 @@
     <el-menu default-active="1" id="nav-menu">
         <div class="logo">
             <router-link to="/admin">
-                <h1>Laravel</h1>
+                <h1>Smalltiger</h1>
             </router-link>
         </div>
         <el-submenu index="1">
