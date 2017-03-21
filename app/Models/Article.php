@@ -32,4 +32,5 @@ class Article extends Model
     {
         return $model->orWhere('title' , 'like' ,'%' . $title .'%');
     }
+
 }

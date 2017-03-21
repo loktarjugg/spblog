@@ -10,6 +10,7 @@ namespace App\Repositories;
 
 
 use App\Models\Article;
+use Conner\Tagging\Model\Tag;
 use GrahamCampbell\Markdown\Facades\Markdown;
 
 
@@ -22,6 +23,28 @@ class ArticleRepository
     public function __construct(Article $article)
     {
         $this->model = $article;
+    }
+
+    public function lists()
+    {
+        $model = $this->model;
+
+        if (\Request::has('title')){
+            $model = $model->orWhere('title' , 'like' ,'%' . \Request::get('title') .'%');
+        }
+
+        if (\Request::has('tags')){
+            $model = $model->withAllTags(\Request::get('tags'));
+        }
+
+        if(\Request::has('groups')){
+            $tags = Tag::inGroup(\Request::get('groups'))->pluck('name')->toArray();
+            $model = $model->withAnyTag($tags);
+        }
+
+        $per_count = \Request::has('per_count') ? (int) \Request::get('per_count') : 10;
+
+        return $this->paginate($model , $per_count);
     }
 
     public function findBySlug($slug)

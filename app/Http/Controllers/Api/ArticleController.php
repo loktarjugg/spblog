@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\ArticleRequest;
+use App\Models\Article;
 use App\Models\Reply;
 use App\Repositories\ArticleRepository;
 use App\Transformers\ArticleTransformer;
@@ -45,7 +46,37 @@ class ArticleController extends ApiController
      */
     public function create()
     {
-        //
+        $array  = [100,200,9,8,11,23,99,22,33,20,109,555,333,222,2,6,5,4];
+
+        dd(static::quickSort($array));
+    }
+
+    private static function quickSort($array = [])
+    {
+        $length = count($array);
+        if ( $length <= 1){
+            return $array;
+        }
+
+        $element = $array[0];
+
+        $left = $right = [];
+
+        for ($i = 1; $i < $length ; $i++ ){
+
+            if ($element > $array[$i]){
+                $left[] = $array[$i];
+            }else{
+                $right[] = $array[$i];
+            }
+        }
+        $left = static::quickSort($left);
+
+        $right = static::quickSort($right);
+
+
+        return array_merge($left ,  [$element] , $right );
+
     }
 
     /**
