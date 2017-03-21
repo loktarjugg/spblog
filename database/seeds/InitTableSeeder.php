@@ -18,15 +18,33 @@ class InitTableSeeder extends Seeder
      */
     public function run()
     {
-        $tags = [
+
+        $tagGroups = [
+            'works','blog','share'
+        ];
+        foreach ($tagGroups as $tagGroup) {
+            $group_name = $tagGroup;
+            $tag_group = new \Conner\Tagging\Model\TagGroup();
+            $tag_group->name = $group_name;
+            $tag_group->slug = $this->taggingUtility->slug($group_name);
+            $tag_group->save();
+        }
+
+        $blog = [
+            '设计漫谈',
+            '优文私藏',
+            '不负时光',
+        ];
+
+        $works = [
             '界面' ,
             '动态' ,
             '图标' ,
             '壁纸',
             '其他',
-            '设计漫谈',
-            '优文私藏',
-            '不负时光',
+        ];
+
+        $share = [
             '灵感创意',
             '摄影图库',
             '设计团队',
@@ -35,22 +53,28 @@ class InitTableSeeder extends Seeder
             '经验教程',
         ];
 
-        foreach ($tags as $tag) {
+        foreach ($blog as $item) {
             $tagModel = new \Conner\Tagging\Model\Tag();
-            $tagModel->name = $tag;
-            $tagModel->slug =  $this->taggingUtility->slug($tag);
+            $tagModel->name = $item;
+            $tagModel->slug =  $this->taggingUtility->slug($item);
             $tagModel->save();
+            $tagModel->setGroup('blog');
         }
 
-        $tagGroups = [
-            'blog','works','share'
-        ];
-        foreach ($tagGroups as $tagGroup) {
-            $group_name = $tagGroup;
-            $tag_group = new \Conner\Tagging\Model\TagGroup();
-            $tag_group->name = $group_name;
-            $tag_group->slug = $this->taggingUtility->slug($group_name);
-            $tag_group->save();
+        foreach ($works as $item) {
+            $tagModel = new \Conner\Tagging\Model\Tag();
+            $tagModel->name = $item;
+            $tagModel->slug =  $this->taggingUtility->slug($item);
+            $tagModel->save();
+            $tagModel->setGroup('works');
+        }
+
+        foreach ($share as $item) {
+            $tagModel = new \Conner\Tagging\Model\Tag();
+            $tagModel->name = $item;
+            $tagModel->slug =  $this->taggingUtility->slug($item);
+            $tagModel->save();
+            $tagModel->setGroup('share');
         }
 
     }
