@@ -15,6 +15,7 @@
                             :on-error="handleError"
                             :on-remove="handleRemove"
                             action="/api/upload"
+                            :file-list="form.file_list"
                             mutiple>
                         <i class="el-icon-upload"></i>
                         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -29,7 +30,7 @@
                             label="name"
                             track-by="name"
                             :options="tags"
-                            :value="tag"
+                            :value="form.tags"
                             :multiple="true"
                             :taggable="true"
                             :max="3"
@@ -39,13 +40,17 @@
                     <input hidden v-model="form.tags">
                 </el-form-item>
 
+                <el-form-item label="简介" prop="desc">
+                    <el-input type="textarea" v-model="form.desc" :rows="5"></el-input>
+                </el-form-item>
+
                 <el-form-item label="文章内容" prop="body" id="textarea_body">
-                    <textarea id="textarea"></textarea>
+                    <textarea id="textarea" ></textarea>
                     <input hidden v-model="form.body">
                 </el-form-item>
 
                 <el-form-item>
-                    <el-button type="primary" @click="submitForm('form')">立即创建</el-button>
+                    <el-button type="primary" @click="submitForm('form')">确认修改</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -68,7 +73,10 @@
                     title: '',
                     cover: '',
                     tags :[],
-                    body:''
+                    body:'',
+                    file_list:[],
+                    desc:'',
+                    slug:''
                 },
                 rules: {
                     title: [
@@ -81,28 +89,64 @@
                     tags : [
                         {required:true ,message:'必须选择一个标签'}
                     ],
+                    desc : [
+                        {required:true ,message:'简介不能为空' ,trigger:'blur'},
+                        { min: 20 ,max:200, message: '不少于20个字,最多200字', trigger: 'blur' }
+                    ],
                     body : [
                         {required:true ,message:'内容不能为空' ,trigger:'blur'},
-                        { min: 1 , message: '最少100个字', trigger: 'blur' }
+                        { min: 1 , message: '最少1个字', trigger: 'blur' }
                     ],
-                }
+                },
+                simplemde:{}
             };
         },
         created(){
-            this.fetchData();
+            this.getTags();
+            this.fatchData();
         },
         computed:{
             ...mapState([
                 'tags',
-                'tag',
+                'article'
             ])
         },
         mounted() {
-            this.initialize();
+            this.simplemde = new SimpleMDE({
+                element: document.getElementById("textarea"),
+                spellChecker:false,
+                initialValue:this.article.body
+            });
+            this.simplemde.codemirror.on('change', () => {
+                this.form.body = this.simplemde.value();
+            });
+            //自动上传解析
+            inlineAttachment.editors.codemirror4.attach(this.simplemde.codemirror, {
+                uploadUrl:'/api/upload',
+                uploadFieldName:'file',
+                jsonFieldName:'path'
+            });
         },
         methods: {
-            fetchData(){
-                this.$store.dispatch('getTags');
+            fatchData(){
+                window.axios.get('/api/articles/' + this.$route.params.slug ,{
+                    params:{
+                        include:'tags'
+                    }
+                }).then(response => {
+                        let article = response.data.data;
+                        this.form.title = article.title;
+                        this.form.file_list = [{
+                            name:article.cover,
+                            url : article.cover
+                        }];
+                        this.form.cover = article.cover;
+                        this.form.slug = article.slug;
+                        this.form.desc = article.description;
+                        this.form.tags = article.tags;
+                        this.simplemde.value(article.original_body);
+
+                    })
             },
             submitForm(formName) {
                 let _this = this;
@@ -112,26 +156,25 @@
                             title : this.form.title,
                             cover : this.form.cover,
                             tags  : this.form.tags,
-                            body  : this.form.body
+                            body  : this.form.body,
+                            description : this.form.desc
                         };
                         let loading = _this.$loading({fullscreen :true});
-                        window.axios.post('/api/articles' , formData)
+                        window.axios.put('/api/articles/' + _this.form.slug , formData)
                             .then(response => {
                                 loading.close();
-
                                 this.$notify({
                                     title: '成功',
                                     message: '操作成功, 1.5秒后自动跳转',
                                     duration:1500,
                                     type: 'success'
                                 });
-
                                 setTimeout(function () {
                                     _this.$router.push({name:'articles'});
                                 },1500);
 
-
                             }).catch(error => {
+                                loading.close();
                             errorMessage()
                         });
 
@@ -150,49 +193,29 @@
                 this.form.cover = '';
             },
             handleTagSelect(tag){
-                this.form.tags.push(tag.name)
+                this.form.tags.push({
+                    name:tag.name
+                })
             },
-            handleTagRemove(tag , id){
+            handleTagRemove(tag){
                 let tags = this.form.tags;
-                for ( let t in tags){
-                    if (tags[t] == tag){
-                        console.log(t)
+                for ( var t in tags){
+                    if (tags[t].name == tag.name){
+                        this.form.tags.splice(t,1);
                     }
                 }
             },
+            putTag(tag){
+                this.form.tags.push({
+                    name:tag
+                });
+//                this.$store.dispatch('putTag',tag);
+            },
             ...mapActions([
                 'postArticle',
-                'putTag'
+                'getTags',
+                'getArticle'
             ]),
-            initialize() {
-                let configs = {};
-                configs.element = document.getElementById("textarea");
-                configs.initialValue = configs.initialValue || this.form.body;
-                configs.lineWrapping = false;
-                configs.parsingConfig = {
-                    allowAtxHeaderWithoutSpace: true,
-                    strikethrough: false,
-                    underscoresBreakWords: true,
-                };
-                configs.spellChecker=false;
-
-                // 实例化编辑器
-                this.simplemde = new SimpleMDE(configs);
-
-                // 判断是否引入样式文件
-                require('simplemde/dist/simplemde.min.css');
-
-                // 绑定输入事件
-                this.simplemde.codemirror.on('change', () => {
-                    this.form.body = this.simplemde.value();
-                });
-
-                inlineAttachment.editors.codemirror4.attach(this.simplemde.codemirror, {
-                    uploadUrl:'/api/upload',
-                    uploadFieldName:'file',
-                    jsonFieldName:'path'
-                });
-            },
             addPreviewClass(className) {
                 const wrapper = this.simplemde.codemirror.getWrapperElement();
                 const preview = document.createElement('div');
@@ -212,13 +235,14 @@
         }
     }
     #textarea_body{
-    .el-form-item__error{
-        top:90% !important;
-    }
-    .CodeMirror{
-        z-index:0 !important;
-    }
+        .el-form-item__error{
+            top:90% !important;
+        }
+        .CodeMirror{
+            z-index:999 !important;
+        }
     }
 </style>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+<style src="simplemde/dist/simplemde.min.css"></style>
 

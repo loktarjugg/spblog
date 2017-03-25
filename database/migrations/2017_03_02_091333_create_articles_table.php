@@ -22,6 +22,7 @@ class CreateArticlesTable extends Migration
             $table->string('original_link')->nullable();
             $table->text('original_body');
             $table->text('body');
+            $table->string('description');
             $table->unsignedInteger('vote_count')->default(0);
             $table->unsignedInteger('view_count')->default(0);
             $table->unsignedInteger('last_replies_id')->nullable();

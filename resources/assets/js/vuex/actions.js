@@ -13,10 +13,13 @@ export default {
     },
 
     getArticle: ({commit} , slug ) => {
-        return window.axios.get('/api/articles/' + slug)
+        return window.axios.get('/api/articles/' + slug ,{
+            params:{
+                include:'tags'
+            }
+        })
             .then(response => {
-
-                commit('SET_ARTICLE', response.data)
+                commit('SET_ARTICLE', response.data.data)
             })
     },
 
@@ -40,6 +43,7 @@ export default {
             responseType: 'json'
         })
             .then(response => {
+                console.log(response.data.data)
                 commit('SET_TAGS', response.data.data)
             })
             .catch(error =>{

@@ -49,17 +49,17 @@
                 <el-table-column label="操作" prop="id">
                     <template scope="scope">
                         <el-button
-                                size="small"> <router-link :to="{name: 'articles-edit' , params:{ id: scope.row.id }}">编辑</router-link> </el-button>
+                                size="small"> <router-link :to="{name: 'articles-edit' , params:{ slug: scope.row.slug }}">编辑</router-link> </el-button>
                         <el-button
                                 size="small"
                                 type="danger"
-                                @click="handleDelete(scope.row.id)">删除</el-button>
+                                @click="handleDelete(scope.row.slug)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
         </div>
 
-        <div class="pagination">
+        <div class="pagination" v-if="articles.meta.total > 10">
             <el-pagination v-for="meta in articles.meta"
                     @current-change="handleCurrentChange"
                     :current-page="meta.current_page"
@@ -81,23 +81,44 @@
             }
         },
         created(){
-            this.fetchData();
+            this.getArticles();
         },
         computed: mapState([
             'articles'
         ]),
         methods: {
+            ...mapActions([
+                'getArticles'
+            ]),
             fetchData(){
                 this.$store.dispatch('getArticles');
             },
             handleCurrentChange(val) {
                 this.$store.dispatch('getArticles' , val);
             },
-            handleEdit(id) {
-                console.log('article edit');
-            },
-            handleDelete(id) {
-                console.log('article deleted');
+            handleDelete(slug) {
+                this.$confirm('此操作将永久删除该博文, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    window.axios.delete('/api/articles/' + slug)
+                        .then(response => {
+                            this.$store.dispatch('getArticles');
+                            this.$message({
+                                type: 'success',
+                                message: '删除成功!'
+                            });
+
+                        }).catch(error => {
+                        this.$message({
+                            type: 'error',
+                            message: '删除失败'
+                        });
+                    })
+
+
+                });
             }
         }
     }

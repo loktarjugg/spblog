@@ -20,7 +20,8 @@ class Article extends Model
         'body',
         'vote_count',
         'view_count',
-        'last_replies_id'
+        'last_replies_id',
+        'description'
     ];
 
     public function replies()

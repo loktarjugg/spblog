@@ -70,5 +70,30 @@ class ArticleRepository
         $this->model->fill($data)->save();
 
         $this->model->tag($data['tags']);
+
+        return true;
+    }
+
+    public function update($data , $slug)
+    {
+        $data['original_body'] = $data['body'];
+
+        $data['body'] = Markdown::convertToHtml($data['original_body']);
+
+        $this->model = $this->findBySlug($slug);
+
+        $this->model->retag(collect($data['tags'])->pluck('name')->toArray());
+
+        return $this->save($this->model , $data);
+
+    }
+
+    public function destroy($slug)
+    {
+        $article = $this->findBySlug($slug);
+
+        $article->untag();
+
+        return $article->delete();
     }
 }

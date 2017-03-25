@@ -24,7 +24,7 @@ export default [
                         component : require('./views/articles/create.vue')
                     },
                     {
-                        path:':id/edit',
+                        path:':slug/edit',
                         name:'articles-edit',
                         component: require('./views/articles/edit.vue')
                     }

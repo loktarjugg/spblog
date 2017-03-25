@@ -39,6 +39,10 @@
                     <input hidden v-model="form.tags">
                 </el-form-item>
 
+                <el-form-item label="简介">
+                    <el-input type="textarea" v-model="form.desc" :rows="5"></el-input>
+                </el-form-item>
+
                 <el-form-item label="文章内容" prop="body" id="textarea_body">
                     <textarea id="textarea"></textarea>
                     <input hidden v-model="form.body">
@@ -68,7 +72,8 @@
                     title: '',
                     cover: '',
                     tags :[],
-                    body:''
+                    body:'',
+                    desc:''
                 },
                 rules: {
                     title: [
@@ -80,6 +85,10 @@
                     ],
                     tags : [
                         {required:true ,message:'必须选择一个标签'}
+                    ],
+                    desc : [
+                        {required:true ,message:'简介不能为空' ,trigger:'blur'},
+                        { min: 20 ,max:200, message: '不少于20个字,最多200字', trigger: 'blur' }
                     ],
                     body : [
                         {required:true ,message:'内容不能为空' ,trigger:'blur'},
@@ -98,7 +107,19 @@
             ])
         },
         mounted() {
-            this.initialize();
+            this.simplemde = new SimpleMDE({
+                element: document.getElementById("textarea"),
+                spellChecker:false
+            });
+            this.simplemde.codemirror.on('change', () => {
+                this.form.body = this.simplemde.value();
+            });
+            //自动上传解析
+            inlineAttachment.editors.codemirror4.attach(this.simplemde.codemirror, {
+                uploadUrl:'/api/upload',
+                uploadFieldName:'file',
+                jsonFieldName:'path'
+            });
         },
         methods: {
             fetchData(){
@@ -112,7 +133,9 @@
                             title : this.form.title,
                             cover : this.form.cover,
                             tags  : this.form.tags,
-                            body  : this.form.body
+                            body  : this.form.body,
+                            description  : this.form.desc,
+
                         };
                          let loading = _this.$loading({fullscreen :true});
                         window.axios.post('/api/articles' , formData)
@@ -144,55 +167,33 @@
                 this.form.cover = file.path;
             },
             handleError(file) {
-                console.log(file);
+                errorMessage('图片上传失败！');
             },
             handleRemove(file){
                 this.form.cover = '';
             },
             handleTagSelect(tag){
-                this.form.tags.push(tag.name)
+                this.form.tags.push({
+                    name:tag.name
+                })
             },
             handleTagRemove(tag , id){
                 let tags = this.form.tags;
-                for ( let t in tags){
-                    if (tags[t] == tag){
-                        console.log(t)
+                for ( var t in tags){
+                    if (tags[t].name == tag.name){
+                        this.form.tags.splice(t,1);
                     }
                 }
             },
+            putTag(tag){
+                this.form.tags.push({
+                    name:tag
+                });
+                this.$store.dispatch('putTag',tag);
+            },
             ...mapActions([
                 'postArticle',
-                'putTag'
             ]),
-            initialize() {
-                let configs = {};
-                configs.element = document.getElementById("textarea");
-                configs.initialValue = configs.initialValue || this.form.body;
-                configs.lineWrapping = false;
-                configs.parsingConfig = {
-                    allowAtxHeaderWithoutSpace: true,
-                    strikethrough: false,
-                    underscoresBreakWords: true,
-                };
-                configs.spellChecker=false;
-
-                // 实例化编辑器
-                this.simplemde = new SimpleMDE(configs);
-
-                // 判断是否引入样式文件
-                require('simplemde/dist/simplemde.min.css');
-
-                // 绑定输入事件
-                this.simplemde.codemirror.on('change', () => {
-                    this.form.body = this.simplemde.value();
-                });
-
-                inlineAttachment.editors.codemirror4.attach(this.simplemde.codemirror, {
-                    uploadUrl:'/api/upload',
-                    uploadFieldName:'file',
-                    jsonFieldName:'path'
-                });
-            },
             addPreviewClass(className) {
                 const wrapper = this.simplemde.codemirror.getWrapperElement();
                 const preview = document.createElement('div');
@@ -221,4 +222,5 @@
     }
 </style>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+<style src="simplemde/dist/simplemde.min.css"></style>
 

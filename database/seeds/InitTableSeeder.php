@@ -77,5 +77,13 @@ class InitTableSeeder extends Seeder
             $tagModel->setGroup('share');
         }
 
+        \App\Models\User::create([
+            'email' => 'admin@admin.com',
+            'name'  => 'admin',
+            'password' => bcrypt(123456),
+            'avatar' => 'null',
+            'is_admin' => true
+        ]);
+
     }
 }

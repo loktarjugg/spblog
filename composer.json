@@ -9,7 +9,7 @@
         "barryvdh/laravel-cors": "^0.8.6",
         "graham-campbell/markdown": "^7.1",
         "itbdw/laravel-storage-qiniu": "^1.0",
-        "jellybool/translug": "^1.0",
+        "jellybool/translug": "~1.0",
         "laravel/framework": "5.4.*",
         "laravel/passport": "^2.0",
         "laravel/tinker": "~1.0",
