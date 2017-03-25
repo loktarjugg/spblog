@@ -98522,8 +98522,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     directives: [{
       name: "show",
       rawName: "v-show",
-      value: (_vm.articles.meta.total > 10),
-      expression: "articles.meta.total > 10"
+      value: (_vm.articles.data.meta.total > 10),
+      expression: "articles.data.meta.total > 10"
     }],
     staticClass: "pagination"
   }, _vm._l((_vm.articles.meta), function(meta) {

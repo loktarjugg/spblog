@@ -59,7 +59,7 @@
             </el-table>
         </div>
 
-        <div class="pagination" v-show="articles.meta.total > 10">
+        <div class="pagination" v-show="articles.data.meta.total > 10">
             <el-pagination v-for="meta in articles.meta"
                     @current-change="handleCurrentChange"
                     :current-page="meta.current_page"
