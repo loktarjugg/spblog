@@ -4,7 +4,7 @@ export default {
     getArticles: ({commit} , page ) => {
         return window.axios.get('/api/articles?include=tags', {
             params: {
-                page: page
+                page: page || 1
             }
         })
             .then(response => {

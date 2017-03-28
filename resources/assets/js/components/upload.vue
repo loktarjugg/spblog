@@ -5,31 +5,36 @@
                 drag
                 :on-success="handleSuccess"
                 :on-error="handleError"
-                action="/upload"
+                :on-remove="handleRemove"
+                action="/api/upload"
+                :file-list="fileList"
                 mutiple>
             <i class="el-icon-upload"></i>
             <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-            <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
         </el-upload>
     </div>
 </template>
 
 <script>
 
+    import { errorMessage } from '../views/errors/errorMessage'
     export default {
-        data() {
-            return {
-                fileList: []
-            };
+        props:{
+            fileList:{
+                default:[],
+                type:Array
+            }
         },
         methods: {
-            handleSuccess(file, fileList) {
-                this.fileList = file;
-                console.log(file, fileList);
+            handleSuccess(file) {
+                this.$emit('watch-file' , file.path);
             },
             handleError(file) {
-                console.log(file);
-            }
+                errorMessage('文件上传失败！');
+            },
+            handleRemove(){
+                this.$emit('watch-file' , '');
+            },
         }
     }
 </script>

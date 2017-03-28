@@ -8,35 +8,12 @@
                 </el-form-item>
 
                 <el-form-item label="封面" prop="cover">
-                    <el-upload
-                            class="upload-demo"
-                            drag
-                            :on-success="handleSuccess"
-                            :on-error="handleError"
-                            :on-remove="handleRemove"
-                            action="/api/upload"
-                            :file-list="form.file_list"
-                            mutiple>
-                        <i class="el-icon-upload"></i>
-                        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                    </el-upload>
+                    <Upload v-on:watch-file="watchFile" v-bind:fileList="form.file_list"></Upload>
                     <input hidden v-model="form.cover">
                 </el-form-item>
 
                 <el-form-item label="标签" prop="tags">
-                    <multiselect
-                            tag-placeholder="创建新的标签"
-                            placeholder="搜索或添加标签"
-                            label="name"
-                            track-by="name"
-                            :options="tags"
-                            :value="form.tags"
-                            :multiple="true"
-                            :taggable="true"
-                            :max="3"
-                            @tag="putTag"
-                            @select="handleTagSelect"
-                            @remove="handleTagRemove"></multiselect>
+                    <Taggles v-bind:value="form.tags" v-on:taggle="watchTaggle"></Taggles>
                     <input hidden v-model="form.tags">
                 </el-form-item>
 
@@ -59,14 +36,18 @@
 
 <script>
     import {mapState, mapActions} from 'vuex'
-    import Multiselect from 'vue-multiselect'
     import SimpleMDE from 'simplemde';
     import { errorMessage } from '../errors/errorMessage'
     import '../../plugs/inline_attachment/inline-attachment.min';
     import '../../plugs/inline_attachment/codemirror-4.inline-attachment';
+    import Upload from '../../components/upload.vue';
+    import Taggles from '../../components/tags.vue';
 
     export default {
-        components: { Multiselect },
+        components: {
+            Upload,
+            Taggles
+        },
         data() {
             return {
                 form:{
@@ -102,12 +83,10 @@
             };
         },
         created(){
-            this.getTags();
             this.fatchData();
         },
         computed:{
             ...mapState([
-                'tags',
                 'article'
             ])
         },
@@ -183,46 +162,17 @@
                     }
                 });
             },
-            handleSuccess(file, fileList) {
-                this.form.cover = file.path;
+            watchFile(file){
+                this.form.cover = file;
             },
-            handleError(file) {
-                console.log(file);
-            },
-            handleRemove(file){
-                this.form.cover = '';
-            },
-            handleTagSelect(tag){
-                this.form.tags.push({
-                    name:tag.name
-                })
-            },
-            handleTagRemove(tag){
-                let tags = this.form.tags;
-                for ( var t in tags){
-                    if (tags[t].name == tag.name){
-                        this.form.tags.splice(t,1);
-                    }
-                }
-            },
-            putTag(tag){
+            watchTaggle(tag){
                 this.form.tags.push({
                     name:tag
                 });
-//                this.$store.dispatch('putTag',tag);
             },
             ...mapActions([
-                'postArticle',
-                'getTags',
                 'getArticle'
-            ]),
-            addPreviewClass(className) {
-                const wrapper = this.simplemde.codemirror.getWrapperElement();
-                const preview = document.createElement('div');
-                wrapper.nextSibling.className += ` ${className}`;
-                preview.className = `editor-preview ${className}`;
-                wrapper.appendChild(preview);
-            },
+            ])
 
         }
     }
@@ -242,7 +192,9 @@
             z-index:999 !important;
         }
     }
+    .editor-preview-side img{
+        width: 100%;
+    }
 </style>
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style src="simplemde/dist/simplemde.min.css"></style>
 

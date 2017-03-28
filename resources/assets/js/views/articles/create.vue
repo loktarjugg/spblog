@@ -8,34 +8,12 @@
                 </el-form-item>
 
                 <el-form-item label="封面" prop="cover">
-                    <el-upload
-                            class="upload-demo"
-                            drag
-                            :on-success="handleSuccess"
-                            :on-error="handleError"
-                            :on-remove="handleRemove"
-                            action="/api/upload"
-                            mutiple>
-                        <i class="el-icon-upload"></i>
-                        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                    </el-upload>
+                    <Upload v-on:watch-file="watchFile" v-bind:fileList="form.file_list"></Upload>
                     <input hidden v-model="form.cover">
                 </el-form-item>
 
                 <el-form-item label="标签" prop="tags">
-                    <multiselect
-                            tag-placeholder="创建新的标签"
-                            placeholder="搜索或添加标签"
-                            label="name"
-                            track-by="name"
-                            :options="tags"
-                            :value="tag"
-                            :multiple="true"
-                            :taggable="true"
-                            :max="3"
-                            @tag="putTag"
-                            @select="handleTagSelect"
-                            @remove="handleTagRemove"></multiselect>
+                    <Taggles v-bind:value="form.tags" v-on:taggle="watchTaggle"></Taggles>
                     <input hidden v-model="form.tags">
                 </el-form-item>
 
@@ -58,14 +36,18 @@
 
 <script>
     import {mapState, mapActions} from 'vuex'
-    import Multiselect from 'vue-multiselect'
     import SimpleMDE from 'simplemde';
     import { errorMessage } from '../errors/errorMessage'
     import '../../plugs/inline_attachment/inline-attachment.min';
     import '../../plugs/inline_attachment/codemirror-4.inline-attachment';
+    import Upload from '../../components/upload.vue';
+    import Taggles from '../../components/tags.vue';
 
     export default {
-        components: { Multiselect },
+        components: {
+            Upload,
+            Taggles
+        },
         data() {
             return {
                 form:{
@@ -73,7 +55,8 @@
                     cover: '',
                     tags :[],
                     body:'',
-                    desc:''
+                    desc:'',
+                    file_list:[]
                 },
                 rules: {
                     title: [
@@ -92,19 +75,10 @@
                     ],
                     body : [
                         {required:true ,message:'内容不能为空' ,trigger:'blur'},
-                        { min: 1 , message: '最少100个字', trigger: 'blur' }
+                        { min: 1 , message: '最少1个字', trigger: 'blur' }
                     ],
                 }
             };
-        },
-        created(){
-            this.fetchData();
-        },
-        computed:{
-            ...mapState([
-                'tags',
-                'tag',
-            ])
         },
         mounted() {
             this.simplemde = new SimpleMDE({
@@ -122,9 +96,6 @@
             });
         },
         methods: {
-            fetchData(){
-                this.$store.dispatch('getTags');
-            },
             submitForm(formName) {
                 let _this = this;
                 this.$refs[formName].validate((valid) => {
@@ -163,44 +134,14 @@
                     }
                 });
             },
-            handleSuccess(file, fileList) {
-                this.form.cover = file.path;
+            watchFile(file){
+                this.form.cover = file;
             },
-            handleError(file) {
-                errorMessage('图片上传失败！');
-            },
-            handleRemove(file){
-                this.form.cover = '';
-            },
-            handleTagSelect(tag){
-                this.form.tags.push({
-                    name:tag.name
-                })
-            },
-            handleTagRemove(tag , id){
-                let tags = this.form.tags;
-                for ( var t in tags){
-                    if (tags[t].name == tag.name){
-                        this.form.tags.splice(t,1);
-                    }
-                }
-            },
-            putTag(tag){
+            watchTaggle(tag){
                 this.form.tags.push({
                     name:tag
                 });
-                this.$store.dispatch('putTag',tag);
-            },
-            ...mapActions([
-                'postArticle',
-            ]),
-            addPreviewClass(className) {
-                const wrapper = this.simplemde.codemirror.getWrapperElement();
-                const preview = document.createElement('div');
-                wrapper.nextSibling.className += ` ${className}`;
-                preview.className = `editor-preview ${className}`;
-                wrapper.appendChild(preview);
-            },
+            }
 
         }
     }
@@ -219,6 +160,9 @@
     .CodeMirror{
         z-index:0 !important;
     }
+    }
+    .editor-preview-side img{
+        width: 100%;
     }
 </style>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

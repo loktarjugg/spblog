@@ -32,6 +32,7 @@ $factory->define(App\Models\Article::class, function (Faker\Generator $faker) {
         'qrcode' => $faker->imageUrl(400 , 400),
         'original_body' => $faker->paragraphs(12,true),
         'body'  => $faker->paragraphs(12,true),
+        'description'  => $faker->paragraphs(1,true),
         'vote_count' => rand(1,200),
         'view_count' => rand(1,200)
     ];
