@@ -11,16 +11,30 @@ namespace App\Repositories;
 
 use Conner\Tagging\Model\Tag;
 
+/**
+ * Class TagRepository
+ * @package App\Repositories
+ */
 class TagRepository
 {
     use BaseRepository;
+    /**
+     * @var Tag
+     */
     protected $model;
 
+    /**
+     * TagRepository constructor.
+     * @param Tag $tag
+     */
     public function __construct(Tag $tag)
     {
         $this->model = $tag;
     }
 
+    /**
+     * @return mixed
+     */
     public function lists()
     {
         $tags = $this->model;

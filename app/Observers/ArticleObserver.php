@@ -13,8 +13,15 @@ use App\Models\Article;
 use App\Services\QiniuUpload;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
+/**
+ * Class ArticleObserver
+ * @package App\Observers
+ */
 class ArticleObserver
 {
+    /**
+     * @param Article $article
+     */
     public function saving(Article $article)
     {
         if (! $article->slug){
@@ -22,6 +29,9 @@ class ArticleObserver
         }
     }
 
+    /**
+     * @param Article $article
+     */
     public function saved(Article $article)
     {
         if (! $article->qrcode){

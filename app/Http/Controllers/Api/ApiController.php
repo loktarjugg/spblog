@@ -6,36 +6,63 @@ use App\Services\DataArraySerializer;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * Class ApiController
+ * @package App\Http\Controllers\Api
+ */
 class ApiController extends Controller
 {
+    /**
+     * ApiController constructor.
+     */
     public function __construct()
     {
         //do something ...
     }
-    
-    public function respond($data , $callback , $statusCode = 200 , $headers = [])
+
+    /**
+     * @param $data
+     * @param $callback
+     * @param int $statusCode
+     * @param array $headers
+     * @return JsonResponse
+     */
+    public function respond($data, $callback, $statusCode = 200, $headers = [])
     {
         $manager = fractal($data, $callback)
             ->serializeWith(new DataArraySerializer());
 
-        if (\Request::has('include')){
+        if (\Request::has('include')) {
             $manager->parseIncludes(\Request::get('include'));
         }
 
-        return $manager->respond(200 , $headers);
+        return $manager->respond($statusCode, $headers);
     }
 
+    /**
+     * @return JsonResponse
+     */
     public function nullRespond()
     {
-        return new JsonResponse([] , 204);
+        return new JsonResponse([], 204);
     }
 
-    public function errorRespond($message = '' , $status = 400)
+    /**
+     * @param string $message
+     * @param int $status
+     * @return JsonResponse
+     */
+    public function errorRespond($message = '', $status = 400)
     {
-        return new JsonResponse($message , $status);
+        return new JsonResponse($message, $status);
     }
 
-    public function generalRespond($data , $status = 200)
+    /**
+     * @param $data
+     * @param int $status
+     * @return JsonResponse
+     */
+    public function generalRespond($data, $status = 200)
     {
         return new JsonResponse([
             'data' => $data

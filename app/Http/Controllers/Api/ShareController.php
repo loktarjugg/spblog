@@ -15,12 +15,13 @@ class ShareController extends ApiController
     {
         @parent::__construct();
 
-        $this->middleware(['auth:api' , 'admin'])->only('store','update','destroy');
+        $this->middleware(['auth:api', 'admin'])->only('store', 'update', 'destroy');
 
-        $this->middleware(['cors'])->only('index','show');
+        $this->middleware(['cors'])->only('index', 'show');
 
         $this->shareRepository = $shareRepository;
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -30,7 +31,7 @@ class ShareController extends ApiController
     {
         $lists = $this->shareRepository->lists();
 
-        return $this->respond($lists , new ShareTransformer);
+        return $this->respond($lists, new ShareTransformer);
     }
 
     /**
@@ -46,7 +47,7 @@ class ShareController extends ApiController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -57,7 +58,7 @@ class ShareController extends ApiController
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -68,7 +69,7 @@ class ShareController extends ApiController
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -79,8 +80,8 @@ class ShareController extends ApiController
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -91,7 +92,7 @@ class ShareController extends ApiController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

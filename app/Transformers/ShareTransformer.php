@@ -5,8 +5,15 @@ namespace App\Transformers;
 use App\Models\Share;
 use League\Fractal\TransformerAbstract;
 
+/**
+ * Class ShareTransformer
+ * @package App\Transformers
+ */
 class ShareTransformer extends TransformerAbstract
 {
+    /**
+     * @var array
+     */
     protected $availableIncludes = [
         'tags'
     ];
@@ -25,6 +32,10 @@ class ShareTransformer extends TransformerAbstract
         ];
     }
 
+    /**
+     * @param Share $share
+     * @return \League\Fractal\Resource\Collection
+     */
     public function includeTags(Share $share)
     {
         $tags = $share->tags;

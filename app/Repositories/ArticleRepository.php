@@ -14,53 +14,79 @@ use Conner\Tagging\Model\Tag;
 use GrahamCampbell\Markdown\Facades\Markdown;
 
 
+/**
+ * Class ArticleRepository
+ * @package App\Repositories
+ */
 class ArticleRepository
 {
     use BaseRepository;
 
+    /**
+     * @var Article
+     */
     protected $model;
 
+    /**
+     * ArticleRepository constructor.
+     * @param Article $article
+     */
     public function __construct(Article $article)
     {
         $this->model = $article;
     }
 
+    /**
+     * @return mixed
+     */
     public function lists()
     {
         $model = $this->model;
 
-        if (\Request::has('title')){
-            $model = $model->orWhere('title' , 'like' ,'%' . \Request::get('title') .'%');
+        if (\Request::has('title')) {
+            $model = $model->orWhere('title', 'like', '%' . \Request::get('title') . '%');
         }
 
-        if (\Request::has('tags')){
+        if (\Request::has('tags')) {
             $model = $model->withAllTags(\Request::get('tags'));
         }
 
-        if(\Request::has('groups')){
+        if (\Request::has('groups')) {
             $tags = Tag::inGroup(\Request::get('groups'))->pluck('name')->toArray();
             $model = $model->withAnyTag($tags);
         }
 
-        $per_count = \Request::has('per_count') ? (int) \Request::get('per_count') : 10;
+        $per_count = \Request::has('per_count') ? (int)\Request::get('per_count') : 10;
 
-        return $this->paginate($model , $per_count);
+        return $this->paginate($model, $per_count);
     }
 
+    /**
+     * @param $slug
+     * @return mixed
+     */
     public function findBySlug($slug)
     {
-        return $this->model->where('slug' , $slug)->firstOrFail();
+        return $this->model->where('slug', $slug)->firstOrFail();
     }
 
+    /**
+     * @param $slug
+     * @return mixed
+     */
     public function getReplies($slug)
     {
         $articles = $this->findBySlug($slug);
 
-        $per_page = \Request::has('per_page') ? (int) \Request::get('per_page') : 10;
+        $per_page = \Request::has('per_page') ? (int)\Request::get('per_page') : 10;
 
         return $articles->replies()->paginate($per_page);
     }
 
+    /**
+     * @param $data
+     * @return bool
+     */
     public function store($data)
     {
         $data['original_body'] = $data['body'];
@@ -74,7 +100,12 @@ class ArticleRepository
         return true;
     }
 
-    public function update($data , $slug)
+    /**
+     * @param $data
+     * @param $slug
+     * @return mixed
+     */
+    public function update($data, $slug)
     {
         $data['original_body'] = $data['body'];
 
@@ -84,10 +115,14 @@ class ArticleRepository
 
         $this->model->retag(collect($data['tags'])->pluck('name')->toArray());
 
-        return $this->save($this->model , $data);
+        return $this->save($this->model, $data);
 
     }
 
+    /**
+     * @param $slug
+     * @return mixed
+     */
     public function destroy($slug)
     {
         $article = $this->findBySlug($slug);

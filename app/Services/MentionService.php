@@ -11,14 +11,33 @@ namespace App\Services;
 
 use App\Models\User;
 
+/**
+ * Class MentionService
+ * @package App\Services
+ */
 class MentionService
 {
 
+    /**
+     * @var
+     */
     public $body_parsed;
+    /**
+     * @var array
+     */
     public $users = [];
+    /**
+     * @var
+     */
     public $usernames;
+    /**
+     * @var
+     */
     public $body_original;
 
+    /**
+     * @return array
+     */
     public function getMentionedUsername()
     {
         preg_match_all("/(\S*)\@([^\r\n\s]*)/i", $this->body_original, $atlist_tmp);
@@ -32,6 +51,9 @@ class MentionService
         return array_unique($usernames);
     }
 
+    /**
+     *
+     */
     public function replace()
     {
         $this->body_parsed = $this->body_original;
@@ -43,6 +65,10 @@ class MentionService
         }
     }
 
+    /**
+     * @param $body
+     * @return mixed
+     */
     public function parse($body)
     {
         $this->body_original = $body;

@@ -16,8 +16,9 @@ class TagController extends ApiController
     public function __construct(TagRepository $tagRepository)
     {
         $this->tags = $tagRepository;
-        $this->middleware(['cors'])->only('index','show');
+        $this->middleware(['cors'])->only('index', 'show');
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -27,7 +28,7 @@ class TagController extends ApiController
     {
         $tags = $this->tags->lists();
 
-        return $this->respond($tags , new TagTransformer);
+        return $this->respond($tags, new TagTransformer);
     }
 
     /**
@@ -43,7 +44,7 @@ class TagController extends ApiController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -54,18 +55,18 @@ class TagController extends ApiController
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        
+
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -76,8 +77,8 @@ class TagController extends ApiController
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -88,7 +89,7 @@ class TagController extends ApiController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

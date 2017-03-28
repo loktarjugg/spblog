@@ -9,15 +9,29 @@
 namespace App\Repositories;
 
 
-
+/**
+ * Class BaseRepository
+ * @package App\Repositories
+ */
+/**
+ * Class BaseRepository
+ * @package App\Repositories
+ */
 trait BaseRepository
 {
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function getById($id)
     {
         return $this->model->findOrFail($id);
     }
 
+    /**
+     * @return mixed
+     */
     public function lists()
     {
         $model = $this->model;
@@ -36,21 +50,43 @@ trait BaseRepository
 
     }
 
-    public function page($per_count = 10 , $sortColumn ='created_at' ,$sort = 'desc')
+    /**
+     * @param int $per_count
+     * @param string $sortColumn
+     * @param string $sort
+     * @return mixed
+     */
+    public function page($per_count = 10 , $sortColumn ='created_at' , $sort = 'desc')
     {
         return $this->paginate($this->model , $per_count , $sortColumn , $sort);
     }
 
-    public function paginate($model , $per_count = 10 , $sortColumn ='id' ,$sort = 'desc')
+    /**
+     * @param $model
+     * @param int $per_count
+     * @param string $sortColumn
+     * @param string $sort
+     * @return mixed
+     */
+    public function paginate($model , $per_count = 10 , $sortColumn ='id' , $sort = 'desc')
     {
         return $model->orderBy($sortColumn , $sort)->paginate($per_count);
     }
 
+    /**
+     * @param $data
+     * @return mixed
+     */
     public function store($data)
     {
         return $this->save($this->model , $data);
     }
 
+    /**
+     * @param $model
+     * @param $data
+     * @return mixed
+     */
     public function save($model , $data)
     {
         $model->fill($data);

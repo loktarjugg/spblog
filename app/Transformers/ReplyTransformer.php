@@ -5,9 +5,16 @@ namespace App\Transformers;
 use App\Models\Reply;
 use League\Fractal\TransformerAbstract;
 
+/**
+ * Class ReplyTransformer
+ * @package App\Transformers
+ */
 class ReplyTransformer extends TransformerAbstract
 {
 
+    /**
+     * @var array
+     */
     protected $defaultIncludes =[
         'users'
     ];
@@ -24,6 +31,10 @@ class ReplyTransformer extends TransformerAbstract
         ];
     }
 
+    /**
+     * @param Reply $reply
+     * @return \League\Fractal\Resource\Item
+     */
     public function includeUsers(Reply $reply)
     {
         $user = $reply->user;
