@@ -25,6 +25,7 @@ class ShareTransformer extends TransformerAbstract
     public function transform(Share $share)
     {
         return [
+            'id' => $share->id ,
             'title' => $share->title ,
             'logo'  => $share->logo ,
             'content'=> $share->content,

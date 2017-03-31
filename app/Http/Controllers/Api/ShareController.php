@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\ShareRequest;
 use App\Repositories\ShareRepository;
 use App\Transformers\ShareTransformer;
 use Illuminate\Http\Request;
@@ -50,9 +51,11 @@ class ShareController extends ApiController
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ShareRequest $request)
     {
-        //
+        $this->shareRepository->store($request->except('_token','_url'));
+
+        return $this->nullRespond();
     }
 
     /**
@@ -97,6 +100,8 @@ class ShareController extends ApiController
      */
     public function destroy($id)
     {
-        //
+        $this->shareRepository->destroy($id);
+
+        return $this->nullRespond();
     }
 }

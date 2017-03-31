@@ -13,7 +13,8 @@ export default new Vuex.Store({
         articles: [],
         article: {},
         tags:[],
-        tag:[]
+        tag:[],
+        shares:[],
     },
     // getters,
     mutations,

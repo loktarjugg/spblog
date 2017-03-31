@@ -126,6 +126,7 @@
 
 
                             }).catch(error => {
+                                loading.close();
                                 errorMessage()
                         });
 

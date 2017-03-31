@@ -1,11 +1,9 @@
 <template lang="html">
     <div id="content">
-        <h3>文章列表</h3>
+        <h3>标签组列表</h3>
         <div style="margin-bottom: 20px;">
 
-            <router-link :to="{ name: 'articles-create'}">
-                <el-button type="primary" >创建文章 / 作品<i class="el-icon-plus el-icon--right"></i></el-button>
-            </router-link>
+        <el-button type="primary" >创建标签<i class="el-icon-plus el-icon--right"></i></el-button>
 
         </div>
         <div class="articles-table">
@@ -61,70 +59,26 @@
 
         <div class="pagination">
             <el-pagination v-for="meta in articles.meta"
-                    @current-change="getArticles"
-                    :current-page="meta.current_page"
-                    :page-size="meta.per_page"
-                    layout="total, prev, pager, next"
-                    :total="meta.total" v-show="meta.total >= 10">
+                           @current-change="handleCurrentChange"
+                           :current-page="meta.current_page"
+                           :page-size="meta.per_page"
+                           layout="total, prev, pager, next"
+                           :total="meta.total" v-show="meta.total >= 10">
             </el-pagination>
+
         </div>
     </div>
 </template>
 
 <script>
     import {mapState, mapActions} from 'vuex'
-    export default{
-        data(){
+    export default {
+        data() {
             return {
-                page:{}
+
             }
         },
-        created(){
-            this.getArticles();
-        },
-        computed: mapState([
-            'articles'
-        ]),
-        methods: {
-            ...mapActions([
-                'getArticles'
-            ]),
-            fetchData(){
-                this.$store.dispatch('getArticles');
-            },
-            handleDelete(slug) {
-                this.$confirm('此操作将永久删除该博文, 是否继续?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    window.axios.delete('/api/articles/' + slug)
-                        .then(response => {
-                            this.$store.dispatch('getArticles');
-                            this.$message({
-                                type: 'success',
-                                message: '删除成功!'
-                            });
-
-                        }).catch(error => {
-                        this.$message({
-                            type: 'error',
-                            message: '删除失败'
-                        });
-                    })
-
-
-                });
-            }
-        }
     }
 </script>
 
-<style lang="scss">
-    .el-tag{
-        margin: 0 3px;
-    }
-    .pagination{
-        margin : 10px;
-    }
-</style>
+

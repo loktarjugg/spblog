@@ -3,6 +3,7 @@
 namespace App\Transformers;
 
 use App\Models\Article;
+use Conner\Tagging\Model\Tag;
 use League\Fractal\TransformerAbstract;
 class ArticleTransformer extends TransformerAbstract
 {
@@ -56,9 +57,16 @@ class ArticleTransformer extends TransformerAbstract
 
     protected function getSlug( $articleId  ,$type = 1)
     {
-        if ($type === 1){
-           return Article::where('id', '<', $articleId)->orderBy('id','desc')->pluck('slug')->first();
+        $article = new Article();
+
+        if (\Request::has('groups')){
+            $tags = Tag::inGroup(\Request::get('groups'))->pluck('name')->toArray();
+            $article = $article->withAnyTag($tags);
         }
-        return Article::where('id', '>', $articleId)->orderBy('id','asc')->pluck('slug')->first();
+
+        return $article->where('id' , $type === 1 ?'<':'>' , $articleId)
+            ->orderBy('id' , $type === 1?'desc':'asc')
+            ->pluck('slug')->first();
+
     }
 }

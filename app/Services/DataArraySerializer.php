@@ -9,6 +9,7 @@
 namespace App\Services;
 
 use Spatie\Fractalistic\ArraySerializer;
+use League\Fractal\Pagination\PaginatorInterface;
 
 /**
  * Class DataArraySerializer

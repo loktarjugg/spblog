@@ -14,4 +14,7 @@ export default {
     SET_TAG:(state , tag) => {
         state.tag.push({name:tag})
     },
+    SET_SHARES:(state , shares) => {
+        state.shares = shares;
+    },
 }

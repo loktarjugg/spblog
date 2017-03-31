@@ -23,6 +23,7 @@ Route::group([
     Route::resource('/articles', 'ArticleController');
     Route::get('/articles/{slug}/replies','ArticleController@replies');
     Route::resource('/tags', 'TagController');
+    Route::get('/tags-groups', 'TagController@groupList');
     Route::resource('/shares', 'ShareController');
     Route::post('/upload', 'UploadController@upload');
 });

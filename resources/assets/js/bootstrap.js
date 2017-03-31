@@ -1,6 +1,6 @@
 
 
-import { Notification } from 'element-ui';
+import { errorResponse } from './axios/errors/errorResponse';
 
 window._ = require('lodash');
 
@@ -43,7 +43,9 @@ window.axios.interceptors.request.use(function (config) {
 window.axios.interceptors.response.use(function (response) {
     return response;
 }, function (error) {
-
+    // console.log(error.response);
+    // console.log(error.response.status);
+    errorResponse(error);
     return Promise.reject(error);
 });
 

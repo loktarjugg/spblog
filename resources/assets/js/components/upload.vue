@@ -21,8 +21,8 @@
     export default {
         props:{
             fileList:{
+                type:Array,
                 default:[],
-                type:Array
             }
         },
         methods: {

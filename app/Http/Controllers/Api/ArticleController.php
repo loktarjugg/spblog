@@ -98,7 +98,6 @@ class ArticleController extends ApiController
     public function update(Request $request, $slug)
     {
 
-//        return $this->generalRespond($request->all());
         $this->articleRepository->update($request->all() , $slug);
 
         return $this->nullRespond();

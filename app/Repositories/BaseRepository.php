@@ -48,6 +48,8 @@ trait BaseRepository
 
         return $this->paginate($model , $per_count);
 
+
+
     }
 
     /**
@@ -70,7 +72,14 @@ trait BaseRepository
      */
     public function paginate($model , $per_count = 10 , $sortColumn ='id' , $sort = 'desc')
     {
-        return $model->orderBy($sortColumn , $sort)->paginate($per_count);
+        $queryParams = array_diff_key($_GET, array_flip(['page']));
+
+        return $model->orderBy($sortColumn , $sort)->paginate($per_count)->appends($queryParams);
+    }
+
+    public function destroy($id)
+    {
+        return $this->getById($id)->delete();
     }
 
     /**

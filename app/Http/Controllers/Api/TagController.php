@@ -6,6 +6,7 @@ use App\Models\Article;
 use App\Repositories\TagRepository;
 use App\Transformers\TagTransformer;
 use Conner\Tagging\Model\Tag;
+use Conner\Tagging\Model\TagGroup;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -29,6 +30,12 @@ class TagController extends ApiController
         $tags = $this->tags->lists();
 
         return $this->respond($tags, new TagTransformer);
+    }
+
+    public function groupList()
+    {
+        $groups = TagGroup::all();
+
     }
 
     /**

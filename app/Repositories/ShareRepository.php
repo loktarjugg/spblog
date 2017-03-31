@@ -33,4 +33,14 @@ class ShareRepository
         $this->model = $share;
     }
 
+
+    public function store($data)
+    {
+        $this->model->fill($data)->save();
+
+        $this->model->tag($data['tags']);
+
+        return true;
+    }
+
 }

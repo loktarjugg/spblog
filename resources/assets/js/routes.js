@@ -32,6 +32,33 @@ export default [
                 ]
             },
             {
+                path: 'tags',
+                component: Parent,
+                children: [
+                    {
+                        path: '/',
+                        name: 'tags',
+                        component: require('./views/articles/list.vue')
+                    }
+                ]
+            },
+            {
+                path: 'shares',
+                component: Parent,
+                children: [
+                    {
+                        path: '/',
+                        name: 'shares',
+                        component: require('./views/share/list.vue')
+                    },
+                    {
+                        path: 'create',
+                        name:'shares-create',
+                        component:require('./views/share/create.vue')
+                    }
+                ]
+            },
+            {
                 path: '*',
                 redirect: '/admin'
             }

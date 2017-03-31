@@ -67,6 +67,7 @@ class ArticleRepository
      */
     public function findBySlug($slug)
     {
+
         return $this->model->where('slug', $slug)->firstOrFail();
     }
 

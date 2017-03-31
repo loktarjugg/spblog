@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 export default {
-    getArticles: ({commit} , page ) => {
+    getArticles: ({commit}, page) => {
         return window.axios.get('/api/articles?include=tags', {
             params: {
                 page: page || 1
@@ -12,10 +12,10 @@ export default {
             })
     },
 
-    getArticle: ({commit} , slug ) => {
-        return window.axios.get('/api/articles/' + slug ,{
-            params:{
-                include:'tags'
+    getArticle: ({commit}, slug) => {
+        return window.axios.get('/api/articles/' + slug, {
+            params: {
+                include: 'tags'
             }
         })
             .then(response => {
@@ -23,10 +23,10 @@ export default {
             })
     },
 
-    postArticle: ({commit} , formData ) => {
-        return window.axios.post('/api/articles' , formData)
+    postArticle: ({commit}, formData) => {
+        return window.axios.post('/api/articles', formData)
             .then(response => {
-                commit('LOADING_TOGGLE' , false);
+                commit('LOADING_TOGGLE', false);
                 this.$router.push('articles');
                 // Vue.$router.push('articles');
 
@@ -34,24 +34,32 @@ export default {
                 console.log(error)
             })
     },
-
-    getTags: ({commit} , groups ) => {
-        return window.axios.get('/api/tags' ,{
-            params:{
+    getTags: ({commit}, groups) => {
+        return window.axios.get('/api/tags', {
+            params: {
                 groups: groups
             },
             responseType: 'json'
         })
             .then(response => {
-                console.log(response.data.data)
                 commit('SET_TAGS', response.data.data)
             })
-            .catch(error =>{
-                console.log(error)
+            .catch(error => {
 
             })
     },
-    putTag:({commit} , value) => {
-        commit('SET_TAG' , value);
+    putTag: ({commit}, value) => {
+        commit('SET_TAG', value);
     },
+    getShares: ({commit}, page) => {
+        return window.axios.get('/api/shares', {
+            params: {
+                page: page || 1
+            }
+        })
+            .then(response => {
+                commit('SET_SHARES', response.data)
+            })
+    },
+
 }

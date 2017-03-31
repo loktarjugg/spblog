@@ -22,7 +22,7 @@
         components: { Multiselect },
 
         created(){
-            this.getTags();
+            this.getTags( this.groups);
         },
         computed:{
             ...mapState([
@@ -53,6 +53,10 @@
             max:{
                 type:Number,
                 default:3
+            },
+            groups:{
+                type:String,
+                default:''
             }
 
         },
