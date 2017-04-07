@@ -99556,24 +99556,29 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "to": "/admin"
     }
-  }, [_c('h1', [_vm._v("Smalltiger")])])], 1), _vm._v(" "), _c('el-submenu', {
+  }, [_c('h1', [_vm._v("Spblog")])])], 1), _vm._v(" "), _c('el-menu-item', {
     attrs: {
-      "index": "1"
-    }
-  }, [_c('template', {
-    slot: "title"
-  }, [_c('i', {
-    staticClass: "el-icon-menu"
-  }), _vm._v("文章管理")]), _vm._v(" "), _c('el-menu-item', {
-    attrs: {
-      "index": "1-1"
+      "index": "2"
     }
   }, [_c('router-link', {
     staticClass: "nav-link",
     attrs: {
       "to": "/admin/articles"
     }
-  }, [_vm._v("文章列表")])], 1)], 2), _vm._v(" "), _c('el-menu-item', {
+  }, [_c('i', {
+    staticClass: "iconfont"
+  }, [_vm._v("")]), _vm._v("  文章管理")])], 1), _vm._v(" "), _c('el-menu-item', {
+    attrs: {
+      "index": "2"
+    }
+  }, [_c('router-link', {
+    staticClass: "nav-link",
+    attrs: {
+      "to": "/replies"
+    }
+  }, [_c('i', {
+    staticClass: "iconfont"
+  }, [_vm._v("")]), _vm._v("  评论管理")])], 1), _vm._v(" "), _c('el-menu-item', {
     attrs: {
       "index": "2"
     }
@@ -99583,8 +99588,19 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "to": "/admin/shares"
     }
   }, [_c('i', {
-    staticClass: "el-icon-share"
-  }), _vm._v("分享")])], 1), _vm._v(" "), _c('el-menu-item', {
+    staticClass: "iconfont"
+  }, [_vm._v("")]), _vm._v("  友情链接")])], 1), _vm._v(" "), _c('el-menu-item', {
+    attrs: {
+      "index": "2"
+    }
+  }, [_c('router-link', {
+    staticClass: "nav-link",
+    attrs: {
+      "to": "/users"
+    }
+  }, [_c('i', {
+    staticClass: "iconfont"
+  }, [_vm._v("")]), _vm._v("  用户管理")])], 1), _vm._v(" "), _c('el-menu-item', {
     attrs: {
       "index": "2"
     }
@@ -99594,8 +99610,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "to": "/page3"
     }
   }, [_c('i', {
-    staticClass: "el-icon-message"
-  }), _vm._v("基础设置")])], 1)], 1)
+    staticClass: "iconfont"
+  }, [_vm._v("")]), _vm._v("  基础设置")])], 1)], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {

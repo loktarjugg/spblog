@@ -12,6 +12,7 @@ class ShareController extends ApiController
 {
     protected $shareRepository;
 
+
     public function __construct(ShareRepository $shareRepository)
     {
         @parent::__construct();
