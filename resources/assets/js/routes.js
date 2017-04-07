@@ -55,6 +55,11 @@ export default [
                         path: 'create',
                         name:'shares-create',
                         component:require('./views/share/create.vue')
+                    },
+                    {
+                        path:':id/edit',
+                        name:'shares-edit',
+                        component: require('./views/share/edit.vue')
                     }
                 ]
             },

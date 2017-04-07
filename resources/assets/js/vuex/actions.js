@@ -61,5 +61,14 @@ export default {
                 commit('SET_SHARES', response.data)
             })
     },
+    getUser:( {commit} ) =>{
+        return window.axios.get('/api/users')
+            .then(response =>{
+                commit('SET_USER' , response.data.data)
+            })
+            .catch(error =>{
+
+            })
+    },
 
 }

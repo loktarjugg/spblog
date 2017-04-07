@@ -64,7 +64,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Shanghai',
 
     /*
     |--------------------------------------------------------------------------
@@ -77,7 +77,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'zh-CN',
 
     /*
     |--------------------------------------------------------------------------
@@ -120,7 +120,7 @@ return [
     |
     */
 
-    'log' => env('APP_LOG', 'single'),
+    'log' => env('APP_LOG', 'daily'),
 
     'log_level' => env('APP_LOG_LEVEL', 'debug'),
 
@@ -174,6 +174,7 @@ return [
         SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
         GrahamCampbell\Markdown\MarkdownServiceProvider::class,
         itbdw\QiniuStorage\QiniuFilesystemServiceProvider::class,
+        Laravel\Socialite\SocialiteServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -240,6 +241,7 @@ return [
         'Translug' => \JellyBool\Translug\TranslugFacade::class,
         'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
         'Markdown' =>GrahamCampbell\Markdown\Facades\Markdown::class,
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
 
     ],
 

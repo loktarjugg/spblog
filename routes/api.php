@@ -25,6 +25,8 @@ Route::group([
     Route::resource('/tags', 'TagController');
     Route::get('/tags-groups', 'TagController@groupList');
     Route::resource('/shares', 'ShareController');
+    Route::resource('/user', 'UserController');
+
     Route::post('/upload', 'UploadController@upload');
 });
 

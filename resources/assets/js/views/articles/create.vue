@@ -12,12 +12,19 @@
                     <input hidden v-model="form.cover">
                 </el-form-item>
 
+                <el-form-item label="文章类型" prop="type">
+                    <el-radio-group v-model="form.type">
+                        <el-radio :label="1">文章</el-radio>
+                        <el-radio :label="0">作品</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+
                 <el-form-item label="标签" prop="tags">
-                    <Taggles v-bind:value="form.tags" v-on:taggle="watchTaggle"></Taggles>
+                    <Taggles v-bind:value="form.tags"  :groups="tags_group" v-on:taggle="watchTaggle"></Taggles>
                     <input hidden v-model="form.tags">
                 </el-form-item>
 
-                <el-form-item label="简介">
+                <el-form-item label="简介" prop="desc">
                     <el-input type="textarea" v-model="form.desc" :rows="5"></el-input>
                 </el-form-item>
 
@@ -56,7 +63,8 @@
                     tags :[],
                     body:'',
                     desc:'',
-                    file_list:[]
+                    file_list:[],
+                    type:1
                 },
                 rules: {
                     title: [
@@ -77,7 +85,8 @@
                         {required:true ,message:'内容不能为空' ,trigger:'blur'},
                         { min: 1 , message: '最少1个字', trigger: 'blur' }
                     ],
-                }
+                },
+                tags_group:'blog'
             };
         },
         mounted() {
@@ -106,7 +115,7 @@
                             tags  : this.form.tags,
                             body  : this.form.body,
                             description  : this.form.desc,
-
+                            type : this.form.type
                         };
                          let loading = _this.$loading({fullscreen :true});
                         window.axios.post('/api/articles' , formData)
@@ -144,6 +153,12 @@
                 });
             }
 
+        },
+        watch:{
+            'form.type':function (type) {
+                type === 0 ? this.tags_group ='works' : this.tags_group = 'blog';
+
+            }
         }
     }
 </script>

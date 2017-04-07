@@ -12,8 +12,15 @@
                     <input hidden v-model="form.cover">
                 </el-form-item>
 
+                <el-form-item label="文章类型" prop="type">
+                    <el-radio-group v-model="form.type">
+                        <el-radio :label="1">文章</el-radio>
+                        <el-radio :label="0">作品</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+
                 <el-form-item label="标签" prop="tags">
-                    <Taggles v-bind:value="form.tags" v-on:taggle="watchTaggle"></Taggles>
+                    <Taggles v-bind:value="form.tags" :groups="tags_group" v-on:taggle="watchTaggle"></Taggles>
                     <input hidden v-model="form.tags">
                 </el-form-item>
 
@@ -57,7 +64,8 @@
                     body:'',
                     file_list:[],
                     desc:'',
-                    slug:''
+                    slug:'',
+                    type:1
                 },
                 rules: {
                     title: [
@@ -79,7 +87,8 @@
                         { min: 1 , message: '最少1个字', trigger: 'blur' }
                     ],
                 },
-                simplemde:{}
+                simplemde:{},
+                tags_group:'blog'
             };
         },
         created(){
@@ -136,7 +145,8 @@
                             cover : this.form.cover,
                             tags  : this.form.tags,
                             body  : this.form.body,
-                            description : this.form.desc
+                            description : this.form.desc,
+                            type : this.form.type
                         };
                         let loading = _this.$loading({fullscreen :true});
                         window.axios.put('/api/articles/' + _this.form.slug , formData)
@@ -163,6 +173,10 @@
                 });
             },
             watchFile(file){
+                this.form.file_list = [{
+                    name:file,
+                    url:file
+                }];
                 this.form.cover = file;
             },
             watchTaggle(tag){
@@ -174,6 +188,12 @@
                 'getArticle'
             ])
 
+        },
+        watch:{
+            'form.type':function (type) {
+                type === 0 ? this.tags_group ='works' : this.tags_group = 'blog';
+
+            }
         }
     }
 </script>

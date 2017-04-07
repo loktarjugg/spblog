@@ -40,7 +40,31 @@ class ShareRepository
 
         $this->model->tag($data['tags']);
 
+        $this->model->tags->map(function ($tag) {
+            if (!$tag->isInGroup('share')) {
+                $tag->setGroup('share');
+            }
+        });
+
         return true;
+    }
+
+    public function update($data, $id)
+    {
+
+        $this->model = $this->getById($id);
+
+        $tags = collect($data['tags'])->pluck('name');
+
+        $this->model->retag($tags->toArray());
+
+        $this->model->tags->map(function ($tag) {
+            if (!$tag->isInGroup('share')) {
+                $tag->setGroup('share');
+            }
+        });
+
+        return $this->save($this->model, $data);
     }
 
 }

@@ -40,4 +40,10 @@ return [
         'from' => env('YOUDAO_KEY_FROM'),
     ],
 
+    'github' => [
+        'client_id' => env('GITHUB_ID'),
+        'client_secret' => env('GITHUB_SECRET'),
+        'redirect' => '',
+    ],
+
 ];

@@ -83,6 +83,11 @@
                 this.$store.state.tags.push(tag);
                 this.handleTagSelect(tag);
             },
+        },
+        watch:{
+            'groups':function (groups) {
+                this.getTags( groups );
+            }
         }
 
     }

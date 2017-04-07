@@ -11,6 +11,7 @@ namespace App\Observers;
 
 use App\Models\Article;
 use App\Services\QiniuUpload;
+use Illuminate\Http\JsonResponse;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 /**

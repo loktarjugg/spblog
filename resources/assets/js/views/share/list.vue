@@ -40,7 +40,7 @@
                 <el-table-column label="操作" prop="id">
                     <template scope="scope">
                         <el-button
-                                size="small"> <router-link :to="{name: 'articles-edit' , params:{ slug: scope.row.id }}">编辑</router-link> </el-button>
+                                size="small"> <router-link :to="{name: 'shares-edit' , params:{ id: scope.row.id }}">编辑</router-link> </el-button>
                         <el-button
                                 size="small"
                                 type="danger"

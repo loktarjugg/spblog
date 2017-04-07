@@ -22,6 +22,10 @@ class CreateUsersTable extends Migration
             $table->boolean('status')->default(false);
             $table->boolean('is_admin')->default(false);
             $table->string('confirm_token')->nullable();
+            $table->string('github_token');
+            $table->string('github_name');
+            $table->string('github_url');
+            $table->string('wechat_token');
             $table->rememberToken();
             $table->softDeletes();
             $table->timestamps();

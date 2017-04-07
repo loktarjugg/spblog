@@ -17,4 +17,7 @@ export default {
     SET_SHARES:(state , shares) => {
         state.shares = shares;
     },
+    SET_USER:(state , user) => {
+        state.user = user;
+    },
 }

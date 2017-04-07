@@ -98,7 +98,10 @@ class ArticleRepository
 
         $this->model->tag($data['tags']);
 
-        return true;
+        if(isset($data['type'])){
+            $this->setGroups( $this->model ,$data['type'] );
+        }
+
     }
 
     /**
@@ -116,6 +119,10 @@ class ArticleRepository
 
         $this->model->retag(collect($data['tags'])->pluck('name')->toArray());
 
+        if(isset($data['type'])){
+            $this->setGroups( $this->model ,$data['type']);
+        }
+
         return $this->save($this->model, $data);
 
     }
@@ -131,5 +138,21 @@ class ArticleRepository
         $article->untag();
 
         return $article->delete();
+    }
+
+    /**
+     * set tags group
+     * @param object $model
+     * @param int $type
+     */
+    private function setGroups( $model , $type = 0 )
+    {
+        $model->tags->map(function( $tag ) use ($type){
+            $groups = (boolean) $type ? 'blog' : 'works';
+            if (! $tag->isInGroup($groups) ){
+                $tag->setGroup($groups);
+            }
+        });
+
     }
 }
