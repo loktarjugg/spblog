@@ -18,6 +18,6 @@ export default {
         state.shares = shares;
     },
     SET_USER:(state , user) => {
-        state.user = user;
+        state.users = user;
     },
 }

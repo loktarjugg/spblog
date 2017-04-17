@@ -15,7 +15,7 @@ export default new Vuex.Store({
         tags:[],
         tag:[],
         shares:[],
-        user:{}
+        users:{}
     },
     // getters,
     mutations,

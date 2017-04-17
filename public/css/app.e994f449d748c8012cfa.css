@@ -824,3 +824,7 @@ a {
             transform: scale(0);
   }
 }
+
+#header-button {
+  margin-bottom: 20px;
+}

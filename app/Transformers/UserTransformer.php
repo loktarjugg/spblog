@@ -15,8 +15,11 @@ class UserTransformer extends TransformerAbstract
     public function transform(User $user)
     {
         return [
+            'id'  => $user->id,
             'name' => $user->name,
-            'avatar' => $user->avatar
+            'avatar' => $user->avatar,
+            'status' => (boolean) $user->status,
+            'is_admin' => (boolean) $user->is_admin
         ];
     }
 }

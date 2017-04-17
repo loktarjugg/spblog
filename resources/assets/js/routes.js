@@ -64,6 +64,28 @@ export default [
                 ]
             },
             {
+                path: 'users',
+                component: Parent,
+                children:[
+                    {
+                        path : '/',
+                        name : 'users',
+                        component : require('./views/users/list.vue')
+                    },
+                    {
+                        path : 'create',
+                        name : 'users-create',
+                        component : require('./views/users/create.vue')
+                    },
+                    {
+                        path :'edit',
+                        name : 'users-edit',
+                        component : require('./views/users/edit.vue')
+                    }
+
+                ]
+            },
+            {
                 path: '*',
                 redirect: '/admin'
             }

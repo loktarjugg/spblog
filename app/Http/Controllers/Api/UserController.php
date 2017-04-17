@@ -2,14 +2,20 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\UserRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
-class UserController extends Controller
+use App\Repositories\UserRepository;
+use App\Transformers\UserTransformer;
+class UserController extends ApiController
 {
-    public function __construct()
+    protected $userRepository;
+
+    public function __construct(UserRepository $userRepository)
     {
-        $this->middleware(['auth:api', 'admin'])->only('store', 'update', 'destroy');
+        $this->middleware(['auth:api', 'admin'])->only('store', 'destroy','index');
+        $this->middleware(['cors'])->only('index', 'show');
+        $this->userRepository = $userRepository;
     }
     /**
      * Display a listing of the resource.
@@ -18,7 +24,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $users = $this->userRepository->lists();
+
+        return $this->respond( $users , new UserTransformer);
     }
 
     /**
@@ -37,9 +45,11 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
-        //
+        $this->userRepository->store($request->all());
+
+        return $this->nullRespond();
     }
 
     /**

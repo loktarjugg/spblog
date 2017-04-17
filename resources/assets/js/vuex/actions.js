@@ -61,10 +61,14 @@ export default {
                 commit('SET_SHARES', response.data)
             })
     },
-    getUser:( {commit} ) =>{
-        return window.axios.get('/api/users')
+    getUsers:( {commit} ,page ) =>{
+        return window.axios.get('/api/users' ,  {
+            params: {
+                page: page || 1
+            }
+        })
             .then(response =>{
-                commit('SET_USER' , response.data.data)
+                commit('SET_USER' , response.data)
             })
             .catch(error =>{
 

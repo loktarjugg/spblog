@@ -21,6 +21,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'avatar',
         'email',
         'password',
         'status',
@@ -43,5 +44,18 @@ class User extends Authenticatable
     public function is_admin()
     {
         return (boolean) \Auth::user()->is_admin;
+    }
+
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = bcrypt($value);
+    }
+
+    public function setAvatarAttribute($value)
+    {
+        if (! filter_var($value, FILTER_VALIDATE_URL)){
+          return  $this->attributes['avatar'] = config('spblog.default_url');
+        }
+       return $this->attributes['avatar'] = $value;
     }
 }
